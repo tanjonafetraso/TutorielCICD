@@ -12,12 +12,12 @@ jobs:
       - name: Télécharger le code dans le repositorie
         uses: actions/checkout@v4
 
-      - name: set up JAVA JDK 17
-        uses: actions/stup-java@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: meven
+          cache: maven
 
       - name: Build le projet avec maven
         run: mvn -Dmaven.test.skip=true -B package --file pom.xml
