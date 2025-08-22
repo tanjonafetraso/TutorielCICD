@@ -45,7 +45,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /opt/application
-            docker build -t monapplicationcicd
+            docker build -t monapplicationcicd .
             docker stop monapplicationcicd || true
             docker rm monapplicationcicd || true
             docker run -d --name monapplicationcicd -p 8080:8080 monapplicationcicd
