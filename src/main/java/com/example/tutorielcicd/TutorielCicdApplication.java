@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TutorielCicdApplication {
     @GetMapping("/hello")
     public String teste(){
-     return  "Bonjour mon amie Tanjona.";
+     return  "Bonjour mon amie Tanjona";
     }
 
     public static void main(String[] args) {
