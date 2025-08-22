@@ -1,0 +1,52 @@
+name: tutoriel cicd by tanjona fetrasoa
+
+on:
+  push:
+    branches: [ "main" ]
+    workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Télécharger le code dans le repositorie
+        uses: actions/checkout@v4
+
+      - name: set up JAVA JDK 17
+        uses: actions/stup-java@v4
+        wtih:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: meven
+
+      - name: Build le projet avec maven
+        run: mvn -Dmaven.test.skip=true -B package --file pom.xml
+
+      - name: Renomer le jar
+        run: mv target/*.jar target/tutocicd.jar
+
+      - name: copier les fichiers avec scp
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "target/tutocicd.jar,Dockerfile"
+          target: "/opt/application"
+          strip_components: 0
+
+      - name: Deployer to VPS
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /opt/application
+            docker build -t monapplicationcicd
+            docker stop monapplicationcicd || true
+            docker rm monapplicationcicd || true
+            docker run -d --name monapplicationcicd -p 8080:8080 monapplicationcicd
+            docker ps
