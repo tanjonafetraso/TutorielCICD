@@ -12,6 +12,10 @@ public class TutorielCicdApplication {
     public String teste(){
      return  "Bonjour mon amie Tanjona.";
     }
+    @GetMapping("/hello1")
+    public String teste1(){
+     return  "Bonjour mon amie Tanjona. version 2.0";
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(TutorielCicdApplication.class, args);
